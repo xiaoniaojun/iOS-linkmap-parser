@@ -122,18 +122,10 @@ func parse(row string) {
 		}
 		ParseSymbolsRow(row)
 	case deadstripedsymbols:
+		// 弃用或删除的方法、应该不影响编译包大小
 		break
 	}
 
-}
-
-func ParseSymbolsRow(row string) {
-	if len(row) <= 0 {
-		return
-	}
-	retSize, rowNum := parseSymbolsSizeAndRowNum(row)
-	lib := rowNum2LibMap[rowNum]
-	lib.size += retSize
 }
 
 func parseSymbolsSizeAndRowNum(row string) (retSize uint64, rowNum uint) {
