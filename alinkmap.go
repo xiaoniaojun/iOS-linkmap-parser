@@ -36,8 +36,8 @@ var libraryList = make(map[string]*Library)
 var rowNum2LibMap = make(map[uint]*Library)
 
 func main() {
-	if len(os.Args) != 2 {
-		println("Usage: alinkmap path")
+	if len(os.Args) != 3 {
+		println("Usage: alinkmap path output_path")
 		os.Exit(1)
 	}
 
@@ -59,6 +59,36 @@ func main() {
 	//PrintLibraryList(libraryList)
 
 	PrintLibSize()
+	//OutputThemAll()
+	for _, Mth := range clazzes["BBPlayerPGCVideoModel(ConvertFromPhoneModel)"].Methods {
+		fmt.Println(Mth.MethodName, Mth.Size)
+	}
+}
+
+func OutputThemAll() {
+	fd, err := os.OpenFile(os.Args[2]+"cls.csv", os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fd.Close()
+
+	fd2, err := os.OpenFile(os.Args[2]+"mths.csv", os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fd2.Close()
+
+	//fmt.Fprintf(fd, "%-50s,%-50s,%-50s\n", )
+	fmt.Fprintf(fd, "Class,Method Count,Total Size\n")
+	fmt.Fprintf(fd2, "Method,Size\n")
+	for _, clz := range clazzes {
+		fmt.Fprintf(fd, "%s,%d,%d\n", clz.Cls, len(clz.Methods), clz.Size)
+		for _, Mth := range clz.Methods {
+			fmt.Fprintf(fd2, "%s,%d\n",Mth.MethodName, Mth.Size)
+		}
+	}
+
+
 }
 
 func PrintLibSize() {
